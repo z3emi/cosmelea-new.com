@@ -1,0 +1,31 @@
+# .htaccess في مجلد root (خارج مجلد /public)
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # إعادة توجيه www إلى non-www (اختياري)
+    #RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    #RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+    # توجيه كل الطلبات إلى public/index.php
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L,QSA]
+</IfModule>
+
+# لمنع الوصول إلى ملفات حساسة
+<FilesMatch ".*\.(env|htaccess|git|env\.example|json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# PHP handler (حسب استضافتك)
+<IfModule mime_module>
+    AddHandler application/x-httpd-ea-php84___lsphp .php
+</IfModule>
+RewriteCond %{HTTP_HOST} ^cosmelea\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.cosmelea\.com$
+RewriteRule ^admin$ "https\:\/\/cosmelea\.com\/admin\/dashboard" [R=301,L]
+RewriteCond %{HTTP_HOST} ^cosmelea\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.cosmelea\.com$
+RewriteRule ^admin\/$ "https\:\/\/cosmelea\.com\/admin\/dashboard" [R=301,L]
+

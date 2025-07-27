@@ -1,0 +1,249 @@
+/*
+  Cosmelea Store Stylesheet
+  ---
+  Main Background: #f9f5f1
+  Primary Color: #cd8985
+  Accent Colors: #dcaca9, #be6661, #ffffff, #eadbcd
+*/
+
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+
+/* --- CSS Variables --- */
+:root {
+  --bg-color: #f9f5f1;
+  --primary-color: #cd8985;
+  --primary-darker: #be6661;
+  --accent-light: #dcaca9;
+  --accent-bg: #eadbcd;
+  --white-color: #ffffff;
+  --text-color: #333;
+  --font-family: 'Tajawal', sans-serif;
+}
+
+/* --- General Styles --- */
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  direction: rtl; /* For Arabic Layout */
+  text-align: right;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-darker);
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* --- Buttons --- */
+.btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-darker);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+
+/* --- Header & Navigation --- */
+.main-header {
+  background-color: var(--white-color);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-darker);
+}
+
+.main-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.main-nav a {
+  font-size: 18px;
+  font-weight: 500;
+  padding-bottom: 5px;
+  border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover, .main-nav a.active {
+  color: var(--primary-darker);
+  border-bottom-color: var(--primary-darker);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-actions a {
+  font-size: 22px;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+  background-image: linear-gradient(to left, rgba(234, 219, 205, 0.7), rgba(205, 137, 133, 0.7)), url('https://via.placeholder.com/1600x600.png/f9f5f1/cd8985?text=Cosmetic+Banner');
+  background-size: cover;
+  background-position: center;
+  color: var(--white-color);
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero-section h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+}
+
+.hero-section p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+/* --- Product Card --- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.product-card {
+  background-color: var(--white-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.product-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-category {
+  font-size: 14px;
+  color: var(--accent-light);
+  margin-bottom: 8px;
+}
+
+.product-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-color);
+}
+
+.product-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-darker);
+}
+
+/* --- Footer --- */
+.main-footer {
+  background-color: var(--accent-bg);
+  padding: 40px 0;
+  margin-top: 60px;
+  color: var(--primary-darker);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.footer-col h4 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col a {
+  color: var(--primary-darker);
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--accent-light);
+}
