@@ -152,6 +152,15 @@ public function store(Request $request, InventoryService $inventoryService)
         // تحديث تكلفة المنتجات الإجمالية في الطلب
         $order->update(['total_cost' => $totalCost]);
 
+        // تسجيل استخدام كود الخصم إن وجد
+        if ($discountCodeId) {
+            \App\Models\DiscountCodeUsage::create([
+                'discount_code_id' => $discountCodeId,
+                'user_id' => $user->id,
+                'order_id' => $order->id,
+            ]);
+        }
+
         DB::commit();
 
         // إشعارات الطلب الجديد

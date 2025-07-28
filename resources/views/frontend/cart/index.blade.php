@@ -136,13 +136,13 @@
                     <div class="space-y-4">
                         <template x-for="item in Object.values(cartItems)" :key="item.product.id">
                             <div class="bg-white rounded-lg shadow-sm p-4 flex gap-4">
-                                <a :href="`/product/${item.product.slug}`" class="w-24 h-24 flex-shrink-0">
+                                <a :href="`/product/${item.product.id}`" class="w-24 h-24 flex-shrink-0">
                                     <img :src="item.product.first_image ? `/storage/${item.product.first_image.image_path}` : 'https://placehold.co/150x150?text=No+Image'" :alt="item.product.name_ar" class="w-full h-full object-cover rounded-md">
                                 </a>
                                 <div class="flex flex-col flex-grow w-full">
                                     <div class="flex justify-between items-start">
                                         <div>
-                                            <a :href="`/product/${item.product.slug}`" class="font-bold text-lg text-brand-text hover:text-brand-primary" x-text="item.product.name_ar"></a>
+                                            <a :href="`/product/${item.product.id}`" class="font-bold text-lg text-brand-text hover:text-brand-primary" x-text="item.product.name_ar"></a>
                                             <p class="text-sm text-gray-500">SKU: <span x-text="item.product.sku || 'N/A'"></span></p>
                                         </div>
                                         <button @click="removeItem(item.product.id)" class="text-gray-400 hover:text-red-500 transition" title="إزالة المنتج">

@@ -211,6 +211,15 @@ class OrderController extends Controller
             $order->items()->createMany($orderItemsData);
             $order->update(['total_cost' => $totalCost]);
 
+            // سجل استخدام كود الخصم إن وجد
+            if ($discountCodeId) {
+                \App\Models\DiscountCodeUsage::create([
+                    'discount_code_id' => $discountCodeId,
+                    'user_id' => auth()->id(),
+                    'order_id' => $order->id,
+                ]);
+            }
+
             DB::commit();
 
             // إرسال إشعار للإدارة بوجود طلب جديد
@@ -330,6 +339,15 @@ class OrderController extends Controller
                 'discount_code_id' => $discountCodeId,
                 'total_cost' => $totalCost,
             ]);
+
+            // تحديث أو إنشاء سجل استخدام كود الخصم
+            if ($discountCodeId) {
+                \App\Models\DiscountCodeUsage::create([
+                    'discount_code_id' => $discountCodeId,
+                    'user_id' => auth()->id(),
+                    'order_id' => $order->id,
+                ]);
+            }
 
             DB::commit();
 
