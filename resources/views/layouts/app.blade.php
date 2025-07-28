@@ -101,8 +101,10 @@
 <body
     class="relative flex flex-col min-h-screen pb-20 md:pb-0"
     x-data="{
+        userMenuOpen: false,
+        langMenuOpen: false,
         wishlistCount: {{ auth()->check() ? auth()->user()->favorites()->count() : 0 }},
-        cartCount: {{ count(session('cart', [])) }},
+        cartCount: {{ \App\Http\Controllers\CartController::getCartCount() }},
         isWishlistUpdated: false,
         isCartUpdated: false,
         showWelcome: !sessionStorage.getItem('welcomeScreenShown'),
@@ -154,10 +156,22 @@
                     </div>
                 </form>
                 <div class="hidden md:flex items-center gap-4 text-white">
-                    <div class="flex gap-2">
-                        <a href="{{ route('lang.switch', 'ar') }}" class="hover:underline {{ app()->getLocale() == 'ar' ? 'font-bold' : '' }}">AR</a>
-                        <a href="{{ route('lang.switch', 'en') }}" class="hover:underline {{ app()->getLocale() == 'en' ? 'font-bold' : '' }}">EN</a>
-                        <a href="{{ route('lang.switch', 'ku') }}" class="hover:underline {{ app()->getLocale() == 'ku' ? 'font-bold' : '' }}">KU</a>
+                    <div class="relative">
+                        <button @click="langMenuOpen = !langMenuOpen" class="hover:opacity-80 transition flex items-center gap-1">
+                            @php
+                                $currentLocale = app()->getLocale();
+                                $flagMap = ['en' => 'us', 'ar' => 'iq', 'ku' => 'iq'];
+                            @endphp
+                            <img src="/images/flags/{{ $flagMap[$currentLocale] ?? 'us' }}.svg" class="w-6 h-6 inline-block" alt="{{ strtoupper($currentLocale) }}">
+                            <span class="text-sm hidden sm:inline">{{ strtoupper($currentLocale) }}</span>
+                        </button>
+                        <div x-show="langMenuOpen" @click.away="langMenuOpen = false"
+                             class="absolute right-0 mt-2 w-40 bg-white text-[#4a3f3f] border border-[#eadbcd] rounded-md shadow-lg py-2 text-sm z-50"
+                             x-transition>
+                            <a href="{{ route('lang.switch', 'ar') }}" class="block px-4 py-2 hover:bg-[#f9f5f1]">العربية</a>
+                            <a href="{{ route('lang.switch', 'en') }}" class="block px-4 py-2 hover:bg-[#f9f5f1]">English</a>
+                            <a href="{{ route('lang.switch', 'ku') }}" class="block px-4 py-2 hover:bg-[#f9f5f1]">کوردی</a>
+                        </div>
                     </div>
                     @auth
                     <a href="{{ route('profile.show') }}" class="hover:opacity-80 transition relative group">
