@@ -75,6 +75,10 @@ class ProductController extends Controller
     {
         $request->validate([
             'name_ar' => 'required|string|max:255',
+            'name_en' => 'nullable|string|max:255',
+            'name_ku' => 'nullable|string|max:255',
+            'description_en' => 'nullable|string',
+            'description_ku' => 'nullable|string',
             'sku' => 'required|string|max:255|unique:products,sku',
             'sale_price' => 'nullable|numeric|min:0',
             'sale_starts_at' => 'nullable|date',
@@ -118,6 +122,10 @@ class ProductController extends Controller
     {
         $request->validate([
             'name_ar' => 'required|string|max:255',
+            'name_en' => 'nullable|string|max:255',
+            'name_ku' => 'nullable|string|max:255',
+            'description_en' => 'nullable|string',
+            'description_ku' => 'nullable|string',
             'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
             'sale_price' => 'nullable|numeric|min:0',
             'sale_starts_at' => 'nullable|date',

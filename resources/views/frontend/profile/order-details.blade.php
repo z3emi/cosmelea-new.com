@@ -171,11 +171,11 @@
     <div class="space-y-2 md:space-y-3">
         @foreach($order->items as $item)
         <div class="flex items-center gap-3 p-2 md:p-3 border border-[#eadbcd] rounded-lg product-item">
-            <img src="{{ $item->product?->firstImage ? asset('storage/' . $item->product->firstImage->image_path) : 'https://placehold.co/80x80/f9f5f1/cd8985?text=Img' }}" 
-                 alt="{{ $item->product->name_ar ?? 'منتج' }}" 
+            <img src="{{ $item->product?->firstImage ? asset('storage/' . $item->product->firstImage->image_path) : 'https://placehold.co/80x80/f9f5f1/cd8985?text=Img' }}"
+                 alt="{{ $item->product->name_translated ?? 'منتج' }}"
                  class="w-16 h-16 md:w-20 md:h-20 rounded-md object-cover product-image">
             <div class="flex-grow">
-                <p class="font-semibold text-[#4a3f3f] text-sm md:text-base">{{ $item->product->name_ar ?? 'منتج محذوف' }}</p>
+                <p class="font-semibold text-[#4a3f3f] text-sm md:text-base">{{ $item->product->name_translated ?? 'منتج محذوف' }}</p>
                 <p class="text-[#7a6e6e] text-xs md:text-sm">الكمية: {{ $item->quantity }}</p>
             </div>
             <div class="text-left">

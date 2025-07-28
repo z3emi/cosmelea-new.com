@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $product->name_ar)
+@section('title', $product->name_translated)
 
 @push('styles')
 <style>
@@ -49,7 +49,7 @@
             <div class="md:col-span-2 flex flex-col gap-4">
                 <div class="bg-white p-2 rounded-lg shadow-md border border-gray-200">
                     <button @click="imageZoomOpen = true" class="w-full cursor-zoom-in">
-                        <img :src="mainImage" alt="{{ $product->name_ar }}"
+                        <img :src="mainImage" alt="{{ $product->name_translated }}"
                              class="w-full h-auto aspect-square object-contain rounded-lg">
                     </button>
                 </div>
@@ -72,7 +72,7 @@
                     <a href="{{ route('shop') }}" class="hover:text-brand-primary">المتجر</a> / 
                     <a href="{{ route('shop', ['category' => $product->category->slug]) }}" class="hover:text-brand-primary">{{ $product->category->name_ar }}</a>
                 </div>
-                <h1 class="text-3xl lg:text-4xl font-bold text-brand-text mb-3">{{ $product->name_ar }}</h1>
+                <h1 class="text-3xl lg:text-4xl font-bold text-brand-text mb-3">{{ $product->name_translated }}</h1>
                 <span class="text-sm text-gray-500 mb-4">SKU: {{ $product->sku ?? 'N/A' }}</span>
 
                 <div class="mb-6">
@@ -155,7 +155,7 @@
 
                 <div class="prose max-w-none text-gray-700 leading-relaxed border-t border-gray-200 pt-8">
                     <h3 class="font-bold text-xl mb-4">الوصف</h3>
-                    {!! $product->description_ar !!}
+                    {!! $product->description_translated !!}
                 </div>
             </div>
 
@@ -208,7 +208,7 @@
                     </a>
                     <div class="p-4 text-right">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-lg text-brand-dark">{{ $relatedProduct->name_ar }}</h3>
+                            <h3 class="font-semibold text-lg text-brand-dark">{{ $relatedProduct->name_translated }}</h3>
                             @auth
                             <button 
                                 @click.prevent="

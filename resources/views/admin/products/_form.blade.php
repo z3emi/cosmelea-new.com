@@ -11,12 +11,40 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="mb-3">
+                    <label for="name_en" class="form-label">Product Name (English)</label>
+                    <input type="text" class="form-control @error('name_en') is-invalid @enderror" id="name_en" name="name_en" value="{{ old('name_en', $product->name_en ?? '') }}">
+                    @error('name_en')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="name_ku" class="form-label">ناوی بەرهەم (کوردی)</label>
+                    <input type="text" class="form-control @error('name_ku') is-invalid @enderror" id="name_ku" name="name_ku" value="{{ old('name_ku', $product->name_ku ?? '') }}">
+                    @error('name_ku')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
                 {{-- ===== START: تم تعديل هذا القسم ===== --}}
                 <div class="mb-3">
                     <label for="description_ar" class="form-label">الوصف (عربي) <span class="text-danger">*</span></label>
                     <textarea class="form-control @error('description_ar') is-invalid @enderror" id="description_ar" name="description_ar" rows="5" required>{{ old('description_ar', $product->description_ar ?? '') }}</textarea>
                     @error('description_ar')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="description_en" class="form-label">Description (English)</label>
+                    <textarea class="form-control @error('description_en') is-invalid @enderror" id="description_en" name="description_en" rows="5">{{ old('description_en', $product->description_en ?? '') }}</textarea>
+                    @error('description_en')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="description_ku" class="form-label">وەسف (کوردی)</label>
+                    <textarea class="form-control @error('description_ku') is-invalid @enderror" id="description_ku" name="description_ku" rows="5">{{ old('description_ku', $product->description_ku ?? '') }}</textarea>
+                    @error('description_ku')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -136,23 +164,27 @@
 {{-- ===== START: تم إضافة هذه السكربتات ===== --}}
 <script src="https://cdn.tiny.cloud/1/du3z85vklq5w3g8vsio7qztxeemn1ljmqzedt7n5vndlf6e1/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-    tinymce.init({
-        selector: '#description_ar',
-        plugins: 'directionality link image code lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | ltr rtl | bullist numlist | link image | code',
-        directionality: 'rtl',
-        height: 300,
-        menubar: false,
+    ['#description_ar', '#description_en', '#description_ku'].forEach(function(sel) {
+        if(document.querySelector(sel)) {
+            tinymce.init({
+                selector: sel,
+                plugins: 'directionality link image code lists',
+                toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | ltr rtl | bullist numlist | link image | code',
+                directionality: sel === '#description_en' ? 'ltr' : 'rtl',
+                height: 300,
+                menubar: false,
+            });
+        }
     });
 </script>
 {{-- ===== END: تم إضافة هذه السكربتات ===== --}}
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // This is crucial to save the content from the editor before the form submits
-    const productForm = document.getElementById('description_ar').closest('form');
+    // Ensure TinyMCE content is saved before submitting
+    const productForm = document.querySelector('form');
     if (productForm) {
-        productForm.addEventListener('submit', function(e) {
+        productForm.addEventListener('submit', function () {
             tinymce.triggerSave();
         });
     }

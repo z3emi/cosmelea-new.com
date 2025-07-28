@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', $product->name_ar)
+@section('title', $product->name_translated)
 
 @section('content')
 <div class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
         <!-- صورة المنتج -->
         <div>
-            <img src="{{ asset('storage/' . $product->image_url) }}" alt="{{ $product->name_ar }}" class="w-full h-64 object-cover rounded mb-4">
+            <img src="{{ asset('storage/' . $product->image_url) }}" alt="{{ $product->name_translated }}" class="w-full h-64 object-cover rounded mb-4">
         </div>
 
         <!-- تفاصيل المنتج -->
         <div>
-            <h1 class="text-3xl font-bold text-brand-text mb-4">{{ $product->name_ar }}</h1>
+            <h1 class="text-3xl font-bold text-brand-text mb-4">{{ $product->name_translated }}</h1>
             <p class="text-brand-primary text-2xl font-semibold mb-6">
                 {{ number_format($product->price, 0, ',', '.') }} د.ع
             </p>
             <p class="text-gray-700 leading-relaxed mb-6">
-                {{ $product->description_ar }}
+                {{ $product->description_translated }}
             </p>
 
             <form action="{{ route('cart.store') }}" method="POST">

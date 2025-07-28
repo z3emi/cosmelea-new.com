@@ -112,9 +112,9 @@
                     @foreach($cartItems as $item)
                         <div class="flex justify-between items-center text-sm">
                             <div class="flex items-center gap-3">
-                                <img src="{{ $item['product']->firstImage ? asset('storage/' . $item['product']->firstImage->image_path) : 'https://placehold.co/60x60' }}" alt="{{ $item['product']->name_ar }}" class="w-12 h-12 rounded-md object-cover">
+                                <img src="{{ $item['product']->firstImage ? asset('storage/' . $item['product']->firstImage->image_path) : 'https://placehold.co/60x60' }}" alt="{{ $item['product']->name_translated }}" class="w-12 h-12 rounded-md object-cover">
                                 <div>
-                                    <p class="text-gray-800 font-semibold">{{ $item['product']->name_ar }}</p>
+                                    <p class="text-gray-800 font-semibold">{{ $item['product']->name_translated }}</p>
                                     <p class="text-gray-500">الكمية: {{ $item['quantity'] }}</p>
                                 </div>
                             </div>
