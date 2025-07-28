@@ -608,6 +608,16 @@
                                 <i class="bi bi-box-arrow-up-right me-2"></i> عرض الموقع
                             </a>
                         </li>
+                        @if(session()->has('impersonator_id'))
+                        <li>
+                            <form action="{{ route('admin.users.stopImpersonate') }}" method="POST">
+                                @csrf
+                                <button class="dropdown-item text-warning" type="submit">
+                                    <i class="bi bi-person-x me-2"></i> إيقاف الانتحال
+                                </button>
+                            </form>
+                        </li>
+                        @endif
                         <li>
                             <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                onclick="event.preventDefault(); document.getElementById('logout-form-top').submit();">

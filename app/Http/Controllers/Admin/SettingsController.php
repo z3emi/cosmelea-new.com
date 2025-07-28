@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 class SettingsController extends Controller
 {
@@ -20,6 +21,12 @@ class SettingsController extends Controller
         return view('admin.settings.index', compact('settings'));
     }
 
+    public function logoutAllUsers()
+    {
+        \DB::table('sessions')->whereNotNull('user_id')->delete();
+        return back()->with('success', 'تم تسجيل خروج جميع المستخدمين.');
+    }
+
     public function update(Request $request)
     {
         // قائمة بكل الإعدادات التي نريد حفظها
@@ -28,7 +35,8 @@ class SettingsController extends Controller
             'dashboard_notification_content',
             'show_welcome_screen',
             'welcome_screen_content',
-            'maintenance_mode'
+            'maintenance_mode',
+            'session_lifetime'
         ];
 
         foreach ($settingsKeys as $key) {

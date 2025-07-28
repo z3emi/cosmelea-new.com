@@ -61,6 +61,27 @@
                 </div>
             </div>
 
+            {{-- Session Lifetime Card --}}
+            <div class="card shadow-sm mt-4">
+                <div class="card-header">
+                    <h4 class="mb-0">مدة الجلسة بالدقائق</h4>
+                </div>
+                <div class="card-body">
+                    <input type="number" min="1" class="form-control" name="session_lifetime" value="{{ old('session_lifetime', $settings['session_lifetime'] ?? 120) }}">
+                    <small class="form-text text-muted">تحديد المدة التي يبقى فيها المستخدم مسجلاً قبل خروجه تلقائيًا.</small>
+                </div>
+            </div>
+
+            {{-- Logout All Users --}}
+            <div class="card shadow-sm mt-4">
+                <div class="card-body text-center">
+                    <form action="{{ route('admin.settings.logoutAll') }}" method="POST" onsubmit="return confirm('هل أنت متأكد من تسجيل خروج الجميع؟');">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">تسجيل خروج كل المستخدمين</button>
+                    </form>
+                </div>
+            </div>
+
             <div class="mt-4 text-end">
                 <button type="submit" class="btn btn-primary">حفظ الإعدادات</button>
             </div>

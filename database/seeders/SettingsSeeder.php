@@ -13,5 +13,10 @@ class SettingsSeeder extends Seeder
             ['key' => 'maintenance_mode'],
             ['value' => 'off']
         );
+
+        Setting::updateOrCreate(
+            ['key' => 'session_lifetime'],
+            ['value' => '120']
+        );
     }
 }

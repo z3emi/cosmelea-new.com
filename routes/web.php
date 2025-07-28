@@ -152,6 +152,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::post('users/{user}/ban', [UserController::class, 'ban'])->name('users.ban');
     Route::post('users/{user}/unban', [UserController::class, 'unban'])->name('users.unban');
+    Route::post('users/{user}/force-logout', [UserController::class, 'forceLogout'])->name('users.forceLogout');
+    Route::post('users/force-logout-all', [UserController::class, 'forceLogoutAll'])->name('users.forceLogoutAll');
+    Route::post('users/{user}/impersonate', [UserController::class, 'impersonate'])->name('users.impersonate');
+    Route::post('users/stop-impersonate', [UserController::class, 'stopImpersonate'])->name('users.stopImpersonate');
     Route::get('users/{user}/orders', [UserController::class, 'showUserOrders'])->name('users.orders');
     Route::get('/users/inactive', [UserController::class, 'inactive'])->name('users.inactive');
 
@@ -168,6 +172,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::patch('settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::post('settings/logout-all', [SettingsController::class, 'logoutAllUsers'])->name('settings.logoutAll');
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
     Route::delete('/products/images/{image}', [AdminProductController::class, 'destroyImage'])->name('products.images.destroy');
     
