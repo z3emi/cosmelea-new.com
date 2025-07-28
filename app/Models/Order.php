@@ -9,8 +9,8 @@ use App\Traits\LogsActivity;
 
 class Order extends Model
 {
-    use HasFactory, LogsActivity;
-    use HasFactory, SoftDeletes; 
+    use HasFactory, LogsActivity, SoftDeletes; // AND 'SoftDeletes' MUST BE USED HERE
+
 
     protected $fillable = [
         'user_id',
