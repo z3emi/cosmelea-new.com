@@ -13,7 +13,6 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
         $response->assertStatus(200);
-        // Consider adding more assertions to test page content or structure
-        // $response->assertSee('Welcome'); // Example: check for text on the homepage
+        $response->assertSee('تسوقي الآن');
     }
 }

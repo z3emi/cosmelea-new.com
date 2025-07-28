@@ -15,5 +15,6 @@ class HomepageResponseTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+        $response->assertSee('تسوقي الآن');
     }
 }
