@@ -10,6 +10,8 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -26,6 +28,8 @@ class UserController extends Controller
         $this->middleware($permissionMiddleware . ':edit-users', ['only' => ['edit', 'update']]);
         $this->middleware($permissionMiddleware . ':delete-users', ['only' => ['destroy']]);
         $this->middleware($permissionMiddleware . ':ban-users', ['only' => ['ban', 'unban']]);
+        $this->middleware($permissionMiddleware . ':logout-users', ['only' => ['forceLogout', 'forceLogoutAll']]);
+        $this->middleware($permissionMiddleware . ':impersonate-users', ['only' => ['impersonate', 'stopImpersonate']]);
     }
     // ===== END: تم إضافة هذا الجزء بالكامل =====
 
@@ -144,7 +148,36 @@ class UserController extends Controller
                                ->whereNotNull('whatsapp_otp')
                                ->latest()
                                ->paginate(20);
-                               
+
         return view('admin.users.inactive', compact('inactiveUsers'));
+    }
+
+    public function forceLogout(User $user)
+    {
+        \DB::table('sessions')->where('user_id', $user->id)->delete();
+        return back()->with('success', 'تم تسجيل خروج المستخدم بنجاح.');
+    }
+
+    public function forceLogoutAll()
+    {
+        \DB::table('sessions')->whereNotNull('user_id')->delete();
+        return back()->with('success', 'تم تسجيل خروج جميع المستخدمين.');
+    }
+
+    public function impersonate(User $user)
+    {
+        session(['impersonator_id' => auth()->id()]);
+        auth()->login($user);
+        return redirect('/')->with('success', 'تم تسجيل الدخول كمستخدم آخر.');
+    }
+
+    public function stopImpersonate()
+    {
+        $id = session('impersonator_id');
+        if ($id) {
+            auth()->loginUsingId($id);
+            session()->forget('impersonator_id');
+        }
+        return redirect()->route('admin.users.index')->with('success', 'تم إيقاف وضع الانتحال.');
     }
 }

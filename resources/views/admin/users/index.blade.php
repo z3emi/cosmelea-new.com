@@ -59,6 +59,13 @@
                 <i class="bi bi-plus-circle me-1"></i>
                 إضافة مستخدم جديد
             </a>
+            <form action="{{ route('admin.users.forceLogoutAll') }}" method="POST" class="d-inline" onsubmit="return confirm('تسجيل خروج جميع المستخدمين؟');">
+                @csrf
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <i class="bi bi-box-arrow-right me-1"></i>
+                    تسجيل خروج الكل
+                </button>
+            </form>
         </div>
     </div>
     <div class="card-body">
@@ -142,6 +149,18 @@
                                         </button>
                                     </form>
                                 @endif
+                                <form action="{{ route('admin.users.forceLogout', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('تسجيل خروج هذا المستخدم؟');">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-warning m-1 px-2" title="تسجيل خروج">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                    </button>
+                                </form>
+                                <form action="{{ route('admin.users.impersonate', $user->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-primary m-1 px-2" title="تسجيل الدخول كمستخدم">
+                                        <i class="bi bi-person-check"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @empty

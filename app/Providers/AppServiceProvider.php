@@ -7,6 +7,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate; // استيراد مكتبة الصلاحيات
 use Illuminate\Support\Facades\View;  // استيراد مكتبة الـ View
 use App\Models\Setting;              // استيراد موديل الإعدادات
+use Illuminate\Support\Facades\Config;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,16 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole('Super-Admin') ? true : null;
         });
+
+        // ضبط مدة الجلسة من الإعدادات إن وجدت
+        try {
+            $lifetime = Setting::where('key', 'session_lifetime')->value('value');
+            if ($lifetime) {
+                Config::set('session.lifetime', (int) $lifetime);
+            }
+        } catch (\Exception $e) {
+            // تجاهل أي خطأ في حالة عدم وجود الجدول
+        }
 
         // 3. مشاركة إعدادات الإشعارات مع كل صفحات الواجهة الأمامية
         // هذا الكود ضروري لعمل الإشعار والشاشة الترحيبية
