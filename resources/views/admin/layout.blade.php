@@ -1,5 +1,9 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+@php
+    $locale = app()->getLocale();
+    $dir = in_array($locale, ['ar', 'ku']) ? 'rtl' : 'ltr';
+@endphp
+<html lang="{{ str_replace('_', '-', $locale) }}" dir="{{ $dir }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
