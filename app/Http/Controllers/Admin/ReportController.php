@@ -130,7 +130,7 @@ class ReportController extends Controller
         $summary = Order::where('status', 'delivered')
                             ->whereBetween('created_at', [$startDate, $endDate])
                             ->selectRaw('
-                                SUM(total_amount) as total_sales,
+                                SUM(total_amount - shipping_cost) as total_sales,
                                 SUM(total_cost) as total_cogs,
                                 SUM(discount_amount) as total_discounts,
                                 COUNT(*) as total_orders
@@ -154,7 +154,7 @@ class ReportController extends Controller
             ->orderBy('date', 'ASC')
             ->get([
                 DB::raw('DATE(created_at) as date'),
-                DB::raw('SUM(total_amount) as sales'),
+                DB::raw('SUM(total_amount - shipping_cost) as sales'),
                 DB::raw('SUM(total_cost) as cost'),
             ])
             ->keyBy('date');
