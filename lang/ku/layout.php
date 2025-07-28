@@ -12,6 +12,8 @@ return [
     'shop' => 'دوکان',
     'wishlist' => 'خوازراوەکان',
     'cart' => 'سەبەتەی کڕین',
+    'login_register' => 'چوونەژوورەوە/خۆتۆمارکردن',
+    'categories' => 'بەشەکان',
     'information' => 'زانیاری',
     'about_us' => 'دەربارەی ئێمە',
     'how_to_order' => 'چۆنیەتی داواکردن',

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'كوزميليا | Cosmelea')</title>
+    <title>@yield('title', __('layout.cosmelea') . ' | Cosmelea')</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -142,11 +142,11 @@
             <div class="container mx-auto hidden md:flex items-center justify-between px-4 md:px-8 text-white font-semibold">
                 <a href="{{ route('homepage') }}" class="text-xl sm:text-2xl flex items-center gap-2 hover:opacity-90 transition">
                     <img src="https://cosmelea.com/storage/logo-white.png" alt="logo" class="w-10 h-10">
-                    <span class="text-white font-bold">كوزميليا</span>
+                    <span class="text-white font-bold">{{ __('layout.cosmelea') }}</span>
                 </a>
                 <form action="{{ route('products.search') }}" method="GET" class="flex flex-1 mx-6 max-w-2xl">
                     <div class="flex w-full bg-white rounded-full overflow-hidden">
-                        <input type="text" name="query" placeholder="ابحثي عن منتجاتك المفضلة..."
+                        <input type="text" name="query" placeholder="{{ __('layout.search_placeholder') }}"
                                class="flex-1 px-4 py-2 text-sm text-gray-700 placeholder-gray-500 focus:outline-none">
                         <button type="submit" class="px-4 bg-white text-[#be6661] hover:text-[#cd8985]">
                             <i class="bi bi-search text-lg"></i>
@@ -154,13 +154,18 @@
                     </div>
                 </form>
                 <div class="hidden md:flex items-center gap-4 text-white">
+                    <div class="flex gap-2">
+                        <a href="{{ route('lang.switch', 'ar') }}" class="hover:underline {{ app()->getLocale() == 'ar' ? 'font-bold' : '' }}">AR</a>
+                        <a href="{{ route('lang.switch', 'en') }}" class="hover:underline {{ app()->getLocale() == 'en' ? 'font-bold' : '' }}">EN</a>
+                        <a href="{{ route('lang.switch', 'ku') }}" class="hover:underline {{ app()->getLocale() == 'ku' ? 'font-bold' : '' }}">KU</a>
+                    </div>
                     @auth
                     <a href="{{ route('profile.show') }}" class="hover:opacity-80 transition relative group">
                         <i class="bi bi-person text-xl"></i>
                     </a>
                     @else
                     <a href="{{ route('login') }}" class="hover:underline hover:text-[#f9f5f1] transition text-sm">
-                        تسجيل الدخول أو الاشتراك
+                        {{ __('layout.login_register') }}
                     </a>
                     @endauth
                     <a href="{{ route('cart.index') }}" class="hover:opacity-80 transition relative">
@@ -180,11 +185,11 @@
             <div class="container mx-auto md:hidden flex flex-col items-center gap-3 px-4">
                  <a href="{{ route('homepage') }}" class="text-xl sm:text-2xl flex items-center gap-2 hover:opacity-90 transition text-white font-bold">
                     <img src="https://cosmelea.com/storage/logo-white.png" alt="logo" class="w-8 h-8">
-                    <span>كوزميليا</span>
+                    <span>{{ __('layout.cosmelea') }}</span>
                 </a>
                  <form action="{{ route('products.search') }}" method="GET" class="w-full">
                     <div class="flex w-full bg-white rounded-full overflow-hidden">
-                        <input type="text" name="query" placeholder="ابحثي عن منتجاتك المفضلة..."
+                        <input type="text" name="query" placeholder="{{ __('layout.search_placeholder') }}"
                                class="flex-1 px-4 py-2 text-sm text-gray-700 placeholder-gray-500 focus:outline-none">
                         <button type="submit" class="px-4 bg-white text-[#be6661] hover:text-[#cd8985]">
                             <i class="bi bi-search"></i>
@@ -206,7 +211,7 @@
             <div class="md:col-span-2 flex flex-col items-center md:items-start">
                 <a href="{{ route('homepage') }}" class="flex items-center justify-center md:justify-start gap-2 text-2xl font-bold text-[#be6661] mb-4">
                     <img src="https://cosmelea.com/storage/logo-black.png" alt="Cosmelea Logo" class="w-12 h-12">
-                    كوزميليا
+                    {{ __('layout.cosmelea') }}
                 </a>
                 <p class="leading-relaxed text-sm text-[#6B7280] max-w-md">
                     وجهتكِ الأولى لمنتجات التجميل الأصلية والعناية الفاخرة. نؤمن أن جمالكِ يستحق الأفضل دائمًا.
@@ -220,19 +225,19 @@
             <div>
                 <h3 class="text-lg font-semibold text-[#be6661] mb-4">روابط سريعة</h3>
                 <ul class="space-y-2">
-                    <li><a href="{{ route('homepage') }}" class="hover:text-[#cd8985]">الرئيسية</a></li>
-                    <li><a href="{{ route('shop') }}" class="hover:text-[#cd8985]">المتجر</a></li>
-                    <li><a href="{{ route('wishlist') }}" class="hover:text-[#cd8985]">المفضلة</a></li>
-                    <li><a href="{{ route('profile.show') }}" class="hover:text-[#cd8985]">حسابي</a></li>
+                    <li><a href="{{ route('homepage') }}" class="hover:text-[#cd8985]">{{ __('layout.home') }}</a></li>
+                    <li><a href="{{ route('shop') }}" class="hover:text-[#cd8985]">{{ __('layout.shop') }}</a></li>
+                    <li><a href="{{ route('wishlist') }}" class="hover:text-[#cd8985]">{{ __('layout.wishlist') }}</a></li>
+                    <li><a href="{{ route('profile.show') }}" class="hover:text-[#cd8985]">{{ __('layout.my_account') }}</a></li>
                 </ul>
             </div>
             <div>
-                <h3 class="text-lg font-semibold text-[#be6661] mb-4">معلومات</h3>
+                <h3 class="text-lg font-semibold text-[#be6661] mb-4">{{ __('layout.information') }}</h3>
                 <ul class="space-y-2">
-                    <li><a href="{{ route('about.us') }}" class="hover:text-[#cd8985]">من نحن</a></li>
-                    <li><a href="{{ route('privacy.policy') }}" class="hover:text-[#cd8985]">سياسة الخصوصية</a></li>
-                    <li><a href="{{ route('order.method') }}" class="hover:text-[#cd8985]">طريقة الطلب</a></li>
-                    <li><a href="#" class="hover:text-[#cd8985]">اتصل بنا</a></li>
+                    <li><a href="{{ route('about.us') }}" class="hover:text-[#cd8985]">{{ __('layout.about_us') }}</a></li>
+                    <li><a href="{{ route('privacy.policy') }}" class="hover:text-[#cd8985]">{{ __('layout.privacy_policy') }}</a></li>
+                    <li><a href="{{ route('order.method') }}" class="hover:text-[#cd8985]">{{ __('layout.how_to_order') }}</a></li>
+                    <li><a href="#" class="hover:text-[#cd8985]">{{ __('layout.contact_us') }}</a></li>
                 </ul>
             </div>
         </div>
@@ -247,13 +252,13 @@
             <a href="{{ route('homepage') }}" 
                class="py-3 flex flex-col items-center hover:bg-[#f9f5f1] {{ request()->routeIs('homepage') ? 'bg-[#ad574e] text-white font-bold hover:bg-[#be6661]' : '' }}">
                 <i class="bi bi-house-door text-xl"></i>
-                <span class="text-xs mt-1">الرئيسية</span>
+                <span class="text-xs mt-1">{{ __('layout.home') }}</span>
             </a>
             <!-- المتجر -->
             <a href="{{ route('shop') }}" 
                class="py-3 flex flex-col items-center hover:bg-[#f9f5f1] {{ request()->routeIs('shop') ? 'bg-[#ad574e] text-white font-bold hover:bg-[#be6661]' : '' }}">
                 <i class="bi bi-grid text-xl"></i>
-                <span class="text-xs mt-1">المتجر</span>
+                <span class="text-xs mt-1">{{ __('layout.shop') }}</span>
             </a>
             <!-- السلة -->
             <a href="{{ route('cart.index') }}" 
@@ -262,19 +267,19 @@
                     <i class="bi bi-bag text-xl"></i>
                     <span x-show="cartCount > 0" x-text="cartCount" class="badge" :class="{'animate-ping-once': isCartUpdated}" style="display: none;"></span>
                 </div>
-                <span class="text-xs mt-1">السلة</span>
+                <span class="text-xs mt-1">{{ __('layout.cart') }}</span>
             </a>
             <!-- الاقسام -->
             <a href="{{ route('categories.index') }}" 
                class="py-3 flex flex-col items-center hover:bg-[#f9f5f1] {{ request()->routeIs('categories.index') ? 'bg-[#ad574e] text-white font-bold hover:bg-[#be6661]' : '' }}">
                 <i class="bi bi-grid-3x3-gap text-xl"></i>
-                <span class="text-xs mt-1">الاقسام</span>
+                <span class="text-xs mt-1">{{ __('layout.categories') }}</span>
             </a>
             <!-- حسابي -->
             <a href="{{ route('profile.show') }}" 
                class="py-3 flex flex-col items-center hover:bg-[#f9f5f1] {{ request()->routeIs('profile.show') ? 'bg-[#ad574e] text-white font-bold hover:bg-[#be6661]' : '' }}">
                 <i class="bi bi-person text-xl"></i>
-                <span class="text-xs mt-1">حسابي</span>
+                <span class="text-xs mt-1">{{ __('layout.my_account') }}</span>
             </a>
         </div>
     </footer>

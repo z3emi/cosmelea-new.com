@@ -12,6 +12,8 @@ return [
     'shop' => 'Shop',
     'wishlist' => 'Wishlist',
     'cart' => 'Shopping Cart',
+    'login_register' => 'Login / Register',
+    'categories' => 'Categories',
     'information' => 'Information',
     'about_us' => 'About Us',
     'how_to_order' => 'How to Order',
