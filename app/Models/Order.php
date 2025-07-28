@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes; // THIS LINE MUST BE PRESENT
+use Illuminate\Database\Eloquent\SoftDeletes; 
 use App\Traits\LogsActivity;
 
 class Order extends Model
 {
     use HasFactory, LogsActivity, SoftDeletes; // AND 'SoftDeletes' MUST BE USED HERE
+
 
     protected $fillable = [
         'user_id',
@@ -22,7 +23,7 @@ class Order extends Model
         'total_amount',
         'shipping_cost',
         'status',
-        'discount_amount',     // <-- تأكد من وجود هذا السطر
+        'discount_amount',     
         'discount_code_id',
     ];
 
