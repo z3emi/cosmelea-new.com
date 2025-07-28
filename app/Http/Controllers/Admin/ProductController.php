@@ -30,11 +30,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // ====> هذا هو التعديل المطلوب <====
-        // We use with('firstImage') to efficiently load the first image for each product.
-        $products = Product::with('firstImage')->latest()->paginate(15);
+        // Load the first image for each product and allow custom per_page value
         $perPage = request('per_page', 5);
-         $products = Product::query()->paginate($perPage);
+        $products = Product::with('firstImage')->latest()->paginate($perPage);
 
         return view('admin.products.index', compact('products'));
     }

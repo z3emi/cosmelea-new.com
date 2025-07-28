@@ -9,7 +9,6 @@ use App\Traits\LogsActivity;
 class Product extends Model
 {
     use HasFactory, LogsActivity;
-    use HasFactory;
 
     protected $fillable = [
         'category_id',
