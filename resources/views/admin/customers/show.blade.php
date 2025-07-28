@@ -104,6 +104,21 @@ $statusLabels = [
                 @endif
             </div>
         </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>إحصائيات الطلبات</h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-2"><strong>إجمالي الطلبات:</strong> {{ $totalOrders }}</p>
+                <ul class="list-unstyled small mb-2">
+                    @foreach($orderCounts as $status => $count)
+                        <li>{{ $statusLabels[$status] ?? $status }}: {{ $count }}</li>
+                    @endforeach
+                </ul>
+                <p class="mb-0"><strong>مجموع المبالغ للطلبات المُوصلة:</strong> {{ number_format($deliveredAmount, 0) }} د.ع</p>
+            </div>
+        </div>
     </div>
 
     {{-- Customer Orders Column --}}

@@ -15,6 +15,32 @@
         @endcan
     </div>
     <div class="card-body">
+        <form method="GET" action="{{ route('admin.products.index') }}" class="row g-2 mb-4">
+            <div class="col">
+                <input type="text" name="search" class="form-control" placeholder="ابحث بالاسم أو SKU" value="{{ request('search') }}">
+            </div>
+            <div class="col-auto">
+                <select name="category_id" class="form-select">
+                    <option value="">كل الأقسام</option>
+                    @foreach(\App\Models\Category::all() as $cat)
+                        <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name_ar }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-auto">
+                <select name="status" class="form-select">
+                    <option value="">كل الحالات</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>فعال</option>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>غير فعال</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search me-1"></i> بحث
+                </button>
+            </div>
+        </form>
+
         <div class="table-responsive">
             <table class="table table-bordered text-center align-middle" style="min-width: 950px;">
                 <thead class="table-light">

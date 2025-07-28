@@ -77,10 +77,12 @@
                     </div>
                     @endif
 
-                    <a href="{{ route('profile.addresses.create') }}" class="w-full text-left border rounded-lg p-4 flex items-center gap-3 text-brand-primary font-semibold hover:bg-gray-50 transition">
+                    @if($addresses->count() < 5)
+                    <button type="button" id="addAddressBtn" class="w-full text-left border rounded-lg p-4 flex items-center gap-3 text-brand-primary font-semibold hover:bg-gray-50 transition" data-bs-toggle="modal" data-bs-target="#newAddressModal">
                         <i class="bi bi-plus-circle-fill"></i>
                         <span>إضافة عنوان شحن جديد</span>
-                    </a>
+                    </button>
+                    @endif
                 </div>
             </div>
             
@@ -142,6 +144,43 @@
     </div>
 </form>
 
+<!-- Modal -->
+<div class="modal fade" id="newAddressModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#cd8985;color:white;">
+                <h5 class="modal-title">إضافة عنوان جديد</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="new-address-form">
+                    @csrf
+                    <div class="mb-3">
+                        <label class="form-label">المحافظة</label>
+                        <input type="text" name="governorate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">المدينة / القضاء</label>
+                        <input type="text" name="city" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">تفاصيل العنوان</label>
+                        <input type="text" name="address_details" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">أقرب نقطة دالة</label>
+                        <input type="text" name="nearest_landmark" class="form-control">
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </div>
+                </form>
+                <div class="alert alert-danger mt-2 d-none" id="address-error"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
 </div>
 @endsection
@@ -168,6 +207,39 @@
             const checkedRadio = document.querySelector('input[name="saved_address_id"]:checked');
             if(checkedRadio) {
                 selectAddress(checkedRadio);
+            }
+
+            const newAddressForm = document.getElementById('new-address-form');
+            if(newAddressForm) {
+                newAddressForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(newAddressForm);
+                    fetch('{{ route('checkout.address.store.ajax') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': formData.get('_token') || document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success) {
+                            const list = document.getElementById('saved_addresses_list');
+                            const id = data.address.id;
+                            const label = document.createElement('label');
+                            label.className = 'address-card block border rounded-lg p-4 cursor-pointer transition hover:border-brand-primary selected';
+                            label.innerHTML = `<div class="flex items-center"><input type="radio" name="saved_address_id" value="${id}" class="saved-address-radio h-4 w-4 text-brand-primary focus:ring-brand-primary" checked><div class="ml-3"><p class="font-semibold">${data.address.governorate}, ${data.address.city}</p><p class="text-sm text-gray-600">${data.address.address_details}</p></div></div>`;
+                            list.appendChild(label);
+                            document.querySelectorAll('.address-card').forEach(c => c.classList.remove('selected'));
+                            label.querySelector('input').addEventListener('change', function(){selectAddress(this);});
+                            new bootstrap.Modal(document.getElementById('newAddressModal')).hide();
+                        } else {
+                            const err = document.getElementById('address-error');
+                            err.textContent = data.message || 'خطأ في الحفظ';
+                            err.classList.remove('d-none');
+                        }
+                    });
+                });
             }
         });
     </script>

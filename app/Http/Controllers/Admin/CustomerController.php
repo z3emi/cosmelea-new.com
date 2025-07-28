@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -31,9 +32,11 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 5);
-        $query = Customer::with('user')->withCount(['orders' => function ($query) {
-            $query->where('status', 'delivered');
-        }])->latest();
+        $query = Customer::with('user')
+            ->withCount(['orders' => function ($query) {
+                $query->where('status', 'delivered');
+            }])
+            ->latest();
 
         if ($request->filled('search')) {
             $searchTerm = $request->search;
@@ -41,6 +44,20 @@ class CustomerController extends Controller
                 $q->where('name', 'like', "%{$searchTerm}%")
                   ->orWhere('phone_number', 'like', "%{$searchTerm}%");
             });
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'banned') {
+                $query->whereHas('user', function ($q) {
+                    $q->whereNotNull('banned_at');
+                });
+            } elseif ($request->status === 'active') {
+                $query->where(function ($q) {
+                    $q->whereHas('user', function ($sub) {
+                        $sub->whereNull('banned_at');
+                    })->orWhereDoesntHave('user');
+                });
+            }
         }
 
         $customers = $query->paginate($perPage)->withQueryString();
@@ -96,9 +113,18 @@ class CustomerController extends Controller
         // إضافة إمكانية التحكم في عدد الطلبات المعروضة
         $perPage = $request->input('per_page', 5);
         $orders = $query->paginate($perPage)->withQueryString();
+
+        $totalOrders = $customer->orders()->count();
+        $orderCounts = $customer->orders()
+            ->select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status');
+        $deliveredAmount = $customer->orders()
+            ->where('status', 'delivered')
+            ->sum('total_amount');
         // ===== END: التعديل المطلوب =====
 
-        return view('admin.customers.show', compact('customer', 'orders'));
+        return view('admin.customers.show', compact('customer', 'orders', 'totalOrders', 'orderCounts', 'deliveredAmount'));
     }
 
     /**

@@ -28,11 +28,32 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Load the first image for each product and allow custom per_page value
-        $perPage = request('per_page', 5);
-        $products = Product::with('firstImage')->latest()->paginate($perPage);
+        $perPage = $request->input('per_page', 5);
+        $query = Product::with('firstImage');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name_ar', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $products = $query->latest()->paginate($perPage)->withQueryString();
 
         return view('admin.products.index', compact('products'));
     }

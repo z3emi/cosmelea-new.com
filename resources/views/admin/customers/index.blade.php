@@ -59,9 +59,18 @@
     </div>
     <div class="card-body">
 
-        <form method="GET" action="{{ route('admin.customers.index') }}" class="mb-4">
-            <div class="input-group">
+        <form method="GET" action="{{ route('admin.customers.index') }}" class="row g-2 mb-4">
+            <div class="col">
                 <input type="text" name="search" class="form-control" placeholder="ابحث بالاسم أو رقم الهاتف..." value="{{ request('search') }}">
+            </div>
+            <div class="col-auto">
+                <select name="status" class="form-select">
+                    <option value="">كل الحالات</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>نشط</option>
+                    <option value="banned" {{ request('status') == 'banned' ? 'selected' : '' }}>محظور</option>
+                </select>
+            </div>
+            <div class="col-auto">
                 <button type="submit" class="btn btn-primary" style="background-color: #cd8985; border-color: #cd8985;">
                     <i class="bi bi-search me-1"></i> بحث
                 </button>
