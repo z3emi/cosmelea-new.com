@@ -68,7 +68,7 @@
                     <select id="product_selector" class="form-select">
                         <option value="">-- اختر المنتج --</option>
                         @foreach($products as $product)
-                            <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-stock="{{ $product->stock_quantity }}" data-name="{{ $product->name_ar }}">
+                            <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-stock="{{ $product->stock_quantity }}" data-name="{{ $product->name_ar }}" data-category="{{ $product->category_id }}">
                                 {{ $product->name_ar }} (المتاح: {{ $product->stock_quantity }})
                             </option>
                         @endforeach
@@ -184,10 +184,11 @@ $(document).ready(function() {
         const productName = selectedOption.data('name');
         const productPrice = parseFloat($('#price_selector').val()) || parseFloat(selectedOption.data('price'));
         const stock = parseFloat(selectedOption.data('stock')) || 0;
+        const category = selectedOption.data('category');
         const quantity = parseInt($('#quantity_selector').val());
 
         const newRow = `
-            <tr class="item-row" data-stock="${stock}">
+            <tr class="item-row" data-stock="${stock}" data-category="${category}">
                 <td><input type="hidden" name="products[${productId}][id]" value="${productId}">${productName}</td>
                 <td><input type="number" name="products[${productId}][price]" class="form-control item-price" value="${productPrice}" min="0" step="any" required></td>
                 <td><input type="number" name="products[${productId}][quantity]" class="form-control item-quantity" value="${quantity}" min="1" required></td>
@@ -222,10 +223,20 @@ $(document).ready(function() {
             return;
         }
 
+        const items = [];
+        orderItemsTable.find('tr.item-row').each(function() {
+            items.push({
+                product_id: $(this).find("input[name*='[id]']").val(),
+                category_id: $(this).data('category'),
+                price: parseFloat($(this).find('.item-price').val()) || 0,
+                quantity: parseInt($(this).find('.item-quantity').val()) || 0
+            });
+        });
+
         $.ajax({
             url: "{{ route('admin.orders.applyDiscount') }}",
             method: 'POST',
-            data: { _token: '{{ csrf_token() }}', code: code, subtotal: subtotal },
+            data: { _token: '{{ csrf_token() }}', code: code, items: items },
             success: function(response) {
                 if (response.success) {
                     discountAmount = response.discount_amount;

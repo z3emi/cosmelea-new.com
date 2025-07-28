@@ -11,6 +11,9 @@ use App\Models\Product;
 use App\Models\Customer;
 use App\Models\Address;
 use App\Services\InventoryService;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
+use App\Notifications\OrderStatusUpdated;
 
 class CheckoutController extends Controller
 {
@@ -150,6 +153,13 @@ public function store(Request $request, InventoryService $inventoryService)
         $order->update(['total_cost' => $totalCost]);
 
         DB::commit();
+
+        // إشعارات الطلب الجديد
+        $admins = User::role('admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewOrderNotification($order));
+        }
+        $user->notify(new OrderStatusUpdated($order));
 
         // تنظيف بيانات الجلسة المتعلقة بالعربة والخصم
         session()->forget(['cart', 'discount_code', 'discount_value', 'discount_code_id']);

@@ -43,6 +43,22 @@
                     <label for="expires_at" class="form-label">تاريخ الانتهاء (اتركه فارغاً ليبقى صالحاً دائماً)</label>
                     <input type="datetime-local" class="form-control" id="expires_at" name="expires_at" value="{{ old('expires_at') }}">
                 </div>
+                <div class="col-md-6 mb-3">
+                    <label for="categories" class="form-label">الأقسام المسموح لها</label>
+                    <select multiple class="form-select" id="categories" name="categories[]">
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" @selected(in_array($category->id, old('categories', [])))>{{ $category->name_ar }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="products" class="form-label">المنتجات المسموح لها</label>
+                    <select multiple class="form-select" id="products" name="products[]">
+                        @foreach($products as $product)
+                            <option value="{{ $product->id }}" @selected(in_array($product->id, old('products', [])))>{{ $product->name_ar }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">حفظ الكود</button>
         </form>
