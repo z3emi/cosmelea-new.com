@@ -88,6 +88,22 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="sale_starts_at" class="form-label">تاريخ بدء الخصم</label>
+                    <input type="datetime-local" class="form-control @error('sale_starts_at') is-invalid @enderror" id="sale_starts_at" name="sale_starts_at" value="{{ old('sale_starts_at', isset($product) && $product->sale_starts_at ? $product->sale_starts_at->format('Y-m-d\TH:i') : '') }}">
+                    @error('sale_starts_at')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="sale_ends_at" class="form-label">تاريخ انتهاء الخصم</label>
+                    <input type="datetime-local" class="form-control @error('sale_ends_at') is-invalid @enderror" id="sale_ends_at" name="sale_ends_at" value="{{ old('sale_ends_at', isset($product) && $product->sale_ends_at ? $product->sale_ends_at->format('Y-m-d\TH:i') : '') }}">
+                    @error('sale_ends_at')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label for="category_id" class="form-label">القسم <span class="text-danger">*</span></label>
                     <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
                         <option value="">-- اختر القسم --</option>

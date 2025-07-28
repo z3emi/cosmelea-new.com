@@ -30,7 +30,7 @@ class CartController extends Controller
                         'product' => $product,
                         'quantity' => $details['quantity'],
                     ];
-                    $total += $product->price * $details['quantity'];
+                    $total += $product->current_price * $details['quantity'];
                 } else {
                     // إذا كان المنتج في السلة ولكنه غير موجود في قاعدة البيانات، قم بإزالته
                     unset($cart[$id]);
@@ -144,7 +144,7 @@ class CartController extends Controller
                 $items[] = [
                     'product_id' => $product->id,
                     'category_id' => $product->category_id,
-                    'price' => $product->price,
+                    'price' => $product->current_price,
                     'quantity' => $details['quantity'],
                 ];
             }

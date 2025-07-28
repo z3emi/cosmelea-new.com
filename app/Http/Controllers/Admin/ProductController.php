@@ -55,9 +55,11 @@ class ProductController extends Controller
         $request->validate([
             'name_ar' => 'required|string|max:255',
             'sku' => 'required|string|max:255|unique:products,sku',
-            // ... other validations
-            'images' => 'required|array', // Validate that 'images' is an array
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048', // Validate each image
+            'sale_price' => 'nullable|numeric|min:0',
+            'sale_starts_at' => 'nullable|date',
+            'sale_ends_at' => 'nullable|date|after_or_equal:sale_starts_at',
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -96,8 +98,10 @@ class ProductController extends Controller
         $request->validate([
             'name_ar' => 'required|string|max:255',
             'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
-            // ... other validations
-            'images' => 'nullable|array', // Images are not required on update
+            'sale_price' => 'nullable|numeric|min:0',
+            'sale_starts_at' => 'nullable|date',
+            'sale_ends_at' => 'nullable|date|after_or_equal:sale_starts_at',
+            'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 

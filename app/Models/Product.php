@@ -21,8 +21,15 @@ class Product extends Model
         'description_ku',
         'price',
         'sale_price',
+        'sale_starts_at',
+        'sale_ends_at',
         'image_url',
         'is_active', // <-- تمت الإضافة هنا
+    ];
+
+    protected $casts = [
+        'sale_starts_at' => 'datetime',
+        'sale_ends_at' => 'datetime',
     ];
 
     /**
@@ -103,5 +110,25 @@ class Product extends Model
     public function firstImage()
     {
         return $this->hasOne(ProductImage::class)->oldestOfMany();
+    }
+
+    /**
+     * Determine if the product is currently on sale.
+     */
+    public function isOnSale(): bool
+    {
+        $now = now();
+        return $this->sale_price !== null
+            && $this->sale_price > 0
+            && ($this->sale_starts_at === null || $this->sale_starts_at <= $now)
+            && ($this->sale_ends_at === null || $this->sale_ends_at >= $now);
+    }
+
+    /**
+     * Get the price taking into account any active sale.
+     */
+    public function getCurrentPriceAttribute(): float
+    {
+        return $this->isOnSale() ? $this->sale_price : $this->price;
     }
 }

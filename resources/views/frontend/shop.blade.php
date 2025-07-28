@@ -82,7 +82,7 @@
         <div class="lg:col-span-4">
             <div class="products-grid">
                 @forelse ($products as $product)
-                    <div class="product-card @if($product->sale_price && $product->sale_price > 0) sale-product-highlight @endif" x-data="{
+                    <div class="product-card @if($product->isOnSale()) sale-product-highlight @endif" x-data="{
                         added: false,
                         loadingAdd: false,
                         isFavorite: {{ in_array($product->id, $favoriteProductIds) ? 'true' : 'false' }},
@@ -96,7 +96,7 @@
                                     <img src="https://placehold.co/400x400?text=No+Image" class="w-full h-full object-cover">
                                 @endif
                             </div>
-                            @if($product->sale_price && $product->sale_price > 0)
+                            @if($product->isOnSale())
                                 @php
                                     $discountPercentage = round((($product->price - $product->sale_price) / $product->price) * 100);
                                 @endphp
@@ -134,7 +134,7 @@
                                 @endauth
                             </div>
                             <div class="mb-3">
-                                @if($product->sale_price && $product->sale_price > 0)
+                                @if($product->isOnSale())
                                     <span class="text-brand-primary font-bold text-lg">{{ number_format($product->sale_price, 0) }} د.ع</span>
                                     <span class="text-gray-400 line-through text-sm ml-2">{{ number_format($product->price, 0) }} د.ع</span>
                                 @else

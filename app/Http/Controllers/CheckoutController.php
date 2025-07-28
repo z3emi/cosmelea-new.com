@@ -35,7 +35,7 @@ class CheckoutController extends Controller
         foreach ($cart as $id => $details) {
             if (isset($products[$id])) {
                 $product = $products[$id];
-                $price = $product->sale_price ?? $product->price;
+                $price = $product->current_price;
                 $cartItems[$id] = [
                     'product' => $product,
                     'quantity' => $details['quantity'],
@@ -90,7 +90,7 @@ public function store(Request $request, InventoryService $inventoryService)
         foreach ($cart as $id => $details) {
             if (isset($products[$id])) {
                 $product = $products[$id];
-                $price = $product->sale_price ?? $product->price;
+                $price = $product->current_price;
                 $subtotal += $price * $details['quantity'];
             }
         }
@@ -132,7 +132,7 @@ public function store(Request $request, InventoryService $inventoryService)
         foreach ($cart as $id => $details) {
             if (isset($products[$id])) {
                 $product = $products[$id];
-                $price = $product->sale_price ?? $product->price;
+                $price = $product->current_price;
 
                 // خصم الكمية من المخزون (حسب دالة الـ InventoryService)
                 $itemCost = $inventoryService->deductStock($product, $details['quantity']);

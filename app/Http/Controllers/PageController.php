@@ -25,6 +25,14 @@ class PageController extends Controller
         $saleProducts = Product::where('is_active', true)
             ->whereNotNull('sale_price')
             ->where('sale_price', '>', 0)
+            ->where(function ($q) {
+                $now = now();
+                $q->whereNull('sale_starts_at')->orWhere('sale_starts_at', '<=', $now);
+            })
+            ->where(function ($q) {
+                $now = now();
+                $q->whereNull('sale_ends_at')->orWhere('sale_ends_at', '>=', $now);
+            })
             ->with('firstImage')
             ->inRandomOrder()
             ->take(14)
@@ -94,7 +102,16 @@ class PageController extends Controller
 
         // On-sale filter
         if ($request->boolean('on_sale')) {
-            $query->whereNotNull('sale_price')->where('sale_price', '>', 0);
+            $query->whereNotNull('sale_price')
+                  ->where('sale_price', '>', 0)
+                  ->where(function ($q) {
+                      $now = now();
+                      $q->whereNull('sale_starts_at')->orWhere('sale_starts_at', '<=', $now);
+                  })
+                  ->where(function ($q) {
+                      $now = now();
+                      $q->whereNull('sale_ends_at')->orWhere('sale_ends_at', '>=', $now);
+                  });
         }
 
         // Get products with sorting and pagination

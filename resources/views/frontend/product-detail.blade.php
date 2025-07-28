@@ -76,7 +76,7 @@
                 <span class="text-sm text-gray-500 mb-4">SKU: {{ $product->sku ?? 'N/A' }}</span>
 
                 <div class="mb-6">
-                    @if($product->sale_price && $product->sale_price > 0)
+                    @if($product->isOnSale())
                         <span class="text-brand-primary font-bold text-3xl">{{ number_format($product->sale_price, 0) }} د.ع</span>
                         <span class="text-gray-400 line-through text-xl ml-3">{{ number_format($product->price, 0) }} د.ع</span>
                     @else
@@ -183,7 +183,7 @@
         <h2 class="text-3xl font-bold text-brand-dark mb-8 text-center">ربما يعجبك أيضاً</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @foreach($relatedProducts as $relatedProduct)
-                <div class="product-card @if($relatedProduct->sale_price && $relatedProduct->sale_price > 0) sale-product-highlight @endif" x-data="{
+                <div class="product-card @if($relatedProduct->isOnSale()) sale-product-highlight @endif" x-data="{
                     added: false,
                     loadingAdd: false,
                     isFavorite: {{ in_array($relatedProduct->id, $favoriteProductIds ?? []) ? 'true' : 'false' }},
@@ -197,7 +197,7 @@
                                 <img src="https://placehold.co/400x400?text=No+Image" class="w-full h-full object-cover">
                             @endif
                         </div>
-                        @if($relatedProduct->sale_price && $relatedProduct->sale_price > 0)
+                        @if($relatedProduct->isOnSale())
                             @php
                                 $discountPercentage = round((($relatedProduct->price - $relatedProduct->sale_price) / $relatedProduct->price) * 100);
                             @endphp
@@ -230,7 +230,7 @@
                             @endauth
                         </div>
                         <div class="mb-3">
-                            @if($relatedProduct->sale_price && $relatedProduct->sale_price > 0)
+                            @if($relatedProduct->isOnSale())
                                 <span class="text-brand-primary font-bold text-lg">{{ number_format($relatedProduct->sale_price, 0) }} د.ع</span>
                                 <span class="text-gray-400 line-through text-sm ml-2">{{ number_format($relatedProduct->price, 0) }} د.ع</span>
                             @else
