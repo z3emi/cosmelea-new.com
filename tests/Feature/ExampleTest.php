@@ -16,5 +16,6 @@ class HomepageResponseTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('تسوقي الآن');
+        $response->assertSee('<html lang="ar"', false);
     }
 }
