@@ -33,6 +33,14 @@ class Category extends Model
     }
 
     /**
+     * أكواد الخصم المرتبطة بالقسم.
+     */
+    public function discountCodes()
+    {
+        return $this->belongsToMany(DiscountCode::class, 'category_discount_code');
+    }
+
+    /**
      * دالة جديدة لحساب المجموع الكلي للمنتجات بشكل متداخل (Recursive).
      * تقوم بجمع عدد منتجات القسم الحالي مع عدد منتجات كل الأقسام الفرعية.
      */

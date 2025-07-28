@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DiscountCode;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class DiscountCodeController extends Controller
@@ -39,7 +41,9 @@ public function index(Request $request)
      */
     public function create()
     {
-        return view('admin.discount_codes.create');
+        $categories = Category::all();
+        $products = Product::all();
+        return view('admin.discount_codes.create', compact('categories', 'products'));
     }
 
     /**
@@ -55,9 +59,13 @@ public function index(Request $request)
             'max_uses' => 'nullable|integer|min:1',
             'max_uses_per_user' => 'nullable|integer|min:1',
             'expires_at' => 'nullable|date',
+            'categories' => 'array',
+            'categories.*' => 'exists:categories,id',
+            'products' => 'array',
+            'products.*' => 'exists:products,id',
         ]);
 
-        DiscountCode::create([
+        $discountCode = DiscountCode::create([
             'code' => $request->code,
             'type' => $request->type,
             'value' => $request->value,
@@ -68,6 +76,9 @@ public function index(Request $request)
             'is_active' => true,
         ]);
 
+        $discountCode->categories()->sync($request->input('categories', []));
+        $discountCode->products()->sync($request->input('products', []));
+
         return redirect()->route('admin.discount_codes.index')->with('success', 'تم إنشاء كود الخصم بنجاح.');
     }
 
@@ -76,7 +87,10 @@ public function index(Request $request)
      */
     public function edit(DiscountCode $discount_code)
     {
-        return view('admin.discount_codes.edit', compact('discount_code'));
+        $categories = Category::all();
+        $products = Product::all();
+        $discount_code->load(['categories', 'products']);
+        return view('admin.discount_codes.edit', compact('discount_code', 'categories', 'products'));
     }
 
     /**
@@ -92,6 +106,10 @@ public function index(Request $request)
             'max_uses' => 'nullable|integer|min:1',
             'max_uses_per_user' => 'nullable|integer|min:1',
             'expires_at' => 'nullable|date',
+            'categories' => 'array',
+            'categories.*' => 'exists:categories,id',
+            'products' => 'array',
+            'products.*' => 'exists:products,id',
         ]);
 
         $discount_code->update([
@@ -103,6 +121,9 @@ public function index(Request $request)
             'max_uses_per_user' => $request->max_uses_per_user,
             'expires_at' => $request->expires_at,
         ]);
+
+        $discount_code->categories()->sync($request->input('categories', []));
+        $discount_code->products()->sync($request->input('products', []));
 
         return redirect()->route('admin.discount_codes.index')->with('success', 'تم تحديث كود الخصم بنجاح.');
     }

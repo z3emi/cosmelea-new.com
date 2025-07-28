@@ -9,6 +9,8 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Services\InventoryService;
 use App\Services\DiscountService;
+use App\Notifications\NewOrderNotification;
+use App\Notifications\OrderStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -146,12 +148,19 @@ class OrderController extends Controller
 
         try {
             $subtotal = 0;
+            $items = [];
             foreach ($request->products as $productData) {
                 $product = Product::find($productData['id']);
                 if ($product->stock_quantity < $productData['quantity']) {
                     throw new \Exception("الكمية المطلوبة للمنتج '{$product->name_ar}' غير متوفرة. المتاح: {$product->stock_quantity}");
                 }
                 $subtotal += $productData['price'] * $productData['quantity'];
+                $items[] = [
+                    'product_id' => $product->id,
+                    'category_id' => $product->category_id,
+                    'price' => $productData['price'],
+                    'quantity' => $productData['quantity'],
+                ];
             }
             
             $shippingCost = $request->has('free_shipping') ? 0 : 4000;
@@ -159,7 +168,7 @@ class OrderController extends Controller
             $discountAmount = 0;
             $discountCodeId = null;
             if ($request->filled('discount_code')) {
-                $result = $discountService->apply($request->discount_code, $subtotal);
+                $result = $discountService->apply($request->discount_code, $items);
                 $discountAmount = $result['discount_amount'];
                 $discountCodeId = $result['discount_code_id'];
             }
@@ -203,6 +212,16 @@ class OrderController extends Controller
             $order->update(['total_cost' => $totalCost]);
 
             DB::commit();
+
+            // إرسال إشعار للإدارة بوجود طلب جديد
+            $admins = User::role('admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
+            }
+
+            if ($order->customer && $order->customer->user) {
+                $order->customer->user->notify(new OrderStatusUpdated($order));
+            }
 
             return redirect()->route('admin.orders.show', $order->id)
                              ->with('success', 'تم إنشاء الطلب بنجاح.');
@@ -257,8 +276,16 @@ class OrderController extends Controller
             $order->items()->delete();
 
             $subtotal = 0;
+            $items = [];
             foreach ($request->products as $productData) {
+                $product = Product::find($productData['id']);
                 $subtotal += $productData['price'] * $productData['quantity'];
+                $items[] = [
+                    'product_id' => $product->id,
+                    'category_id' => $product->category_id,
+                    'price' => $productData['price'],
+                    'quantity' => $productData['quantity'],
+                ];
             }
 
             $shippingCost = $request->has('free_shipping') ? 0 : 4000;
@@ -266,7 +293,7 @@ class OrderController extends Controller
             $discountCodeId = null;
 
             if ($request->filled('discount_code')) {
-                $result = $discountService->apply($request->discount_code, $subtotal);
+                $result = $discountService->apply($request->discount_code, $items);
                 $discountAmount = $result['discount_amount'];
                 $discountCodeId = $result['discount_code_id'];
             }
@@ -351,6 +378,10 @@ class OrderController extends Controller
 
             $order->update(['status' => $newStatus]);
 
+            if ($order->customer && $order->customer->user) {
+                $order->customer->user->notify(new OrderStatusUpdated($order));
+            }
+
             DB::commit();
 
             return redirect()->route('admin.orders.show', $order)->with('success', 'تم تحديث حالة الطلب بنجاح.');
@@ -406,9 +437,13 @@ class OrderController extends Controller
 
     public function applyDiscount(Request $request, DiscountService $discountService)
     {
-        $request->validate(['code' => 'required|string', 'subtotal' => 'required|numeric|min:0']);
+        $request->validate([
+            'code' => 'required|string',
+            'items' => 'required|array',
+        ]);
+
         try {
-            $result = $discountService->apply($request->code, $request->subtotal);
+            $result = $discountService->apply($request->code, $request->items);
             return response()->json(['success' => true, 'discount_amount' => $result['discount_amount'], 'message' => 'تم تطبيق الخصم بنجاح.']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);

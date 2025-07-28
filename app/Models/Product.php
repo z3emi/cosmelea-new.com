@@ -80,6 +80,14 @@ class Product extends Model
                      ->withPivot('quantity', 'price');
     }
 
+    /**
+     * الأكواد المرتبطة بالمنتج.
+     */
+    public function discountCodes()
+    {
+        return $this->belongsToMany(DiscountCode::class, 'discount_code_product');
+    }
+
     public function isFavorited()
     {
         return auth()->check() && $this->favorites()->where('user_id', auth()->id())->exists();

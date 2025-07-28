@@ -32,4 +32,20 @@ class DiscountCode extends Model
     {
         return $this->hasMany(DiscountCodeUsage::class, 'discount_code_id');
     }
+
+    /**
+     * المنتجات المرتبطة بهذا الكود.
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'discount_code_product');
+    }
+
+    /**
+     * الأقسام المرتبطة بهذا الكود.
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_discount_code');
+    }
 }

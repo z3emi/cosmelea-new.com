@@ -45,6 +45,22 @@
                     {{-- تحويل صيغة التاريخ لتتوافق مع حقل الإدخال --}}
                     <input type="datetime-local" class="form-control" id="expires_at" name="expires_at" value="{{ old('expires_at', $discount_code->expires_at ? $discount_code->expires_at->format('Y-m-d\TH:i') : '') }}">
                 </div>
+                <div class="col-md-6 mb-3">
+                    <label for="categories" class="form-label">الأقسام المسموح لها</label>
+                    <select multiple class="form-select" id="categories" name="categories[]">
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" @selected(in_array($category->id, old('categories', $discount_code->categories->pluck('id')->toArray())))>{{ $category->name_ar }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="products" class="form-label">المنتجات المسموح لها</label>
+                    <select multiple class="form-select" id="products" name="products[]">
+                        @foreach($products as $product)
+                            <option value="{{ $product->id }}" @selected(in_array($product->id, old('products', $discount_code->products->pluck('id')->toArray())))>{{ $product->name_ar }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
         </form>

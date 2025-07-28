@@ -134,21 +134,28 @@ class CartController extends Controller
         $request->validate(['discount_code' => 'required|string']);
 
         $cart = session()->get('cart', []);
-        $total = 0;
+        $items = [];
         $productIds = array_keys($cart);
         $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
         foreach ($cart as $id => $details) {
             if (isset($products[$id])) {
-                $total += $products[$id]->price * $details['quantity'];
+                $product = $products[$id];
+                $items[] = [
+                    'product_id' => $product->id,
+                    'category_id' => $product->category_id,
+                    'price' => $product->price,
+                    'quantity' => $details['quantity'],
+                ];
             }
         }
 
         try {
-            $result = $discountService->apply($request->discount_code, $total);
+            $result = $discountService->apply($request->discount_code, $items);
             session([
                 'discount_code' => $request->discount_code,
                 'discount_value' => $result['discount_amount'],
+                'discount_code_id' => $result['discount_code_id'],
             ]);
 
             // إرجاع استجابة JSON
