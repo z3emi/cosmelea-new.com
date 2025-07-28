@@ -33,6 +33,26 @@ class Product extends Model
     ];
 
     /**
+     * Get the translated name based on the current locale.
+     */
+    public function getNameTranslatedAttribute(): string
+    {
+        $locale = app()->getLocale();
+        $value = $this->getAttribute('name_' . $locale);
+        return $value ?: $this->name_ar;
+    }
+
+    /**
+     * Get the translated description based on the current locale.
+     */
+    public function getDescriptionTranslatedAttribute(): string
+    {
+        $locale = app()->getLocale();
+        $value = $this->getAttribute('description_' . $locale);
+        return $value ?: $this->description_ar;
+    }
+
+    /**
      * العلاقة مع وجبات الشراء
      */
     public function purchaseItems()

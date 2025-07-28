@@ -133,8 +133,8 @@
                         <div class="flex items-center gap-2 md:gap-3 overflow-x-auto pb-2 scrollbar-hide">
                             @foreach($order->items->take(5) as $item)
                                 @if($item->product)
-                                <img src="{{ $item->product->firstImage ? asset('storage/' . $item->product->firstImage->image_path) : 'https://placehold.co/80x80/f9f5f1/cd8985?text=Img' }}" 
-                                     alt="{{ $item->product->name_ar }}" 
+                                <img src="{{ $item->product->firstImage ? asset('storage/' . $item->product->firstImage->image_path) : 'https://placehold.co/80x80/f9f5f1/cd8985?text=Img' }}"
+                                     alt="{{ $item->product->name_translated }}"
                                      class="w-10 h-10 md:w-12 md:h-12 rounded-md object-cover border border-[#eadbcd] flex-shrink-0">
                                 @endif
                             @endforeach

@@ -113,7 +113,7 @@
                     </a>
                     <div class="p-3 md:p-4 text-right product-info">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-base md:text-lg text-[#4a3f3f] product-title">{{ $product->name_ar }}</h3>
+                            <h3 class="font-semibold text-base md:text-lg text-[#4a3f3f] product-title">{{ $product->name_translated }}</h3>
                             <button 
                                 @click.prevent="
                                     loadingFav = true;

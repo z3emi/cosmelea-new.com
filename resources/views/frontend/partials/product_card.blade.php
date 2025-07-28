@@ -15,7 +15,7 @@
     </a>
     <div class="p-4 text-right">
         <div class="flex justify-between items-start mb-2">
-            <h3 class="font-semibold text-lg text-brand-dark">{{ $product->name_ar }}</h3>
+            <h3 class="font-semibold text-lg text-brand-dark">{{ $product->name_translated }}</h3>
             @auth
             <button 
                 @click.prevent="
