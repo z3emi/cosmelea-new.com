@@ -84,7 +84,7 @@ return [
          * Protocol whitelist
          *
          * Protocols and PHP wrappers allowed in URIs, and the validation rules
-         * that determine if a resouce may be loaded. Full support is not guaranteed
+         * that determine if a resource may be loaded. Full support is not guaranteed
          * for the protocols/wrappers specified
          * by this array.
          *
