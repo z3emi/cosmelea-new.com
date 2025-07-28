@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -26,7 +27,8 @@ class DashboardController extends Controller
         $todayOrders = Order::whereDate('created_at', Carbon::today())->count();
 
         // إجمالي المبيعات
-        $totalSales = Order::where('status', 'delivered')->sum('total_amount');
+        $totalSales = Order::where('status', 'delivered')
+            ->sum(DB::raw('total_amount - shipping_cost'));
 
         // آخر الطلبات
         $latestOrders = Order::with('customer')->latest()->take(5)->get();
