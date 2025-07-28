@@ -6,10 +6,12 @@
 <div class="bg-white rounded-lg shadow-sm border border-[#eadbcd] p-4 md:p-6">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4 md:mb-6">
         <h2 class="text-xl md:text-2xl font-bold text-[#4a3f3f]">عناوين الشحن</h2>
-        <a href="{{ route('profile.addresses.create') }}" 
+        @if($addresses->count() < 5)
+        <a href="{{ route('profile.addresses.create') }}"
            class="bg-[#cd8985] text-white font-bold py-2 px-4 rounded-md hover:bg-[#be6661] transition-colors text-sm w-full md:w-auto text-center">
             <i class="bi bi-plus-circle"></i> إضافة عنوان جديد
         </a>
+        @endif
     </div>
 
     @if ($addresses->isEmpty())

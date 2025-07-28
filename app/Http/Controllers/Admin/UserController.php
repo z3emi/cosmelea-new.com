@@ -48,6 +48,16 @@ class UserController extends Controller
             });
         }
 
+        if ($request->filled('status')) {
+            if ($request->status === 'banned') {
+                $query->whereNotNull('banned_at');
+            } elseif ($request->status === 'active') {
+                $query->whereNull('banned_at')->whereNotNull('phone_verified_at');
+            } elseif ($request->status === 'inactive') {
+                $query->whereNull('phone_verified_at');
+            }
+        }
+
         $users = $query->paginate(15)->withQueryString();
         
         return view('admin.users.index', compact('users'));

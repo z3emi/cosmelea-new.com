@@ -114,11 +114,19 @@ class ProfileController extends Controller
 
     public function createAddress()
     {
+        if (Auth::user()->addresses()->count() >= 5) {
+            return redirect()->route('profile.addresses.index')->with('error', 'لا يمكنك إضافة أكثر من 5 عناوين.');
+        }
+
         return view('frontend.profile.addresses.create');
     }
 
     public function storeAddress(Request $request)
     {
+        if (Auth::user()->addresses()->count() >= 5) {
+            return redirect()->back()->with('error', 'لا يمكنك إضافة أكثر من 5 عناوين.');
+        }
+
         $validatedData = $request->validate([
             'governorate' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -146,6 +154,13 @@ class ProfileController extends Controller
     }
     public function storeAddressAjax(Request $request)
     {
+        if (Auth::user()->addresses()->count() >= 5) {
+            return response()->json([
+                'success' => false,
+                'message' => 'لا يمكنك إضافة أكثر من 5 عناوين.'
+            ], 422);
+        }
+
         $validatedData = $request->validate([
             'governorate' => 'required|string|max:255',
             'city' => 'required|string|max:255',
