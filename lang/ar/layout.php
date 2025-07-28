@@ -12,6 +12,8 @@ return [
     'shop' => 'المتجر',
     'wishlist' => 'المفضلة',
     'cart' => 'عربة التسوق',
+    'login_register' => 'تسجيل الدخول أو الاشتراك',
+    'categories' => 'الاقسام',
     'information' => 'معلومات',
     'about_us' => 'من نحن',
     'how_to_order' => 'طريقة الطلب',

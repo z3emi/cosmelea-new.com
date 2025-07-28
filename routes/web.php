@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth; // موجود فقط بالكود الثاني
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 // Frontend Controllers
 use App\Http\Controllers\HomeController;
@@ -50,6 +52,13 @@ Auth::routes(['verify' => true]);
 Route::get('/maintenance', function () {
     return view('frontend.maintenance');
 })->name('maintenance.page');
+
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['ar', 'en', 'ku'])) {
+        Session::put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
 
 Route::get('/track-order', [OrderTrackingController::class, 'showTrackingForm'])->name('tracking.form');
 Route::post('/track-order', [OrderTrackingController::class, 'trackOrder'])->name('tracking.track');
