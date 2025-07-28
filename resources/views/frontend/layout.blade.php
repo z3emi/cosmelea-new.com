@@ -3,7 +3,7 @@
             userMenuOpen: false, 
             langMenuOpen: false, 
             wishlistCount: {{ Auth::check() ? Auth::user()->favorites()->count() : 0 }},
-            cartCount: 0,
+            cartCount: {{ \App\Http\Controllers\CartController::getCartCount() }},
             isWishlistUpdated: false,
             isCartUpdated: false
         }"
@@ -30,15 +30,19 @@
             {{-- اللغة --}}
             <div class="relative">
                 <button @click="langMenuOpen = !langMenuOpen" class="hover:opacity-80 transition flex items-center gap-1">
-                    <img src="/images/flags/us.svg" class="w-6 h-6 inline-block" alt="EN">
-                    <span class="text-sm hidden sm:inline">EN</span>
+                    @php
+                        $currentLocale = app()->getLocale();
+                        $flagMap = ['en' => 'us', 'ar' => 'iq', 'ku' => 'iq'];
+                    @endphp
+                    <img src="/images/flags/{{ $flagMap[$currentLocale] ?? 'us' }}.svg" class="w-6 h-6 inline-block" alt="{{ strtoupper($currentLocale) }}">
+                    <span class="text-sm hidden sm:inline">{{ strtoupper($currentLocale) }}</span>
                 </button>
                 <div x-show="langMenuOpen" @click.away="langMenuOpen = false"
                      class="absolute right-0 mt-2 w-40 bg-white text-[#4a3f3f] border border-[#eadbcd] rounded-md shadow-lg py-2 text-sm z-50"
                      x-transition>
-                    <a href="#" class="block px-4 py-2 hover:bg-[#f9f5f1]">العربية</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-[#f9f5f1]">English</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-[#f9f5f1]">کوردی</a>
+                    <a href="{{ route('lang.switch', 'ar') }}" class="block px-4 py-2 hover:bg-[#f9f5f1]">العربية</a>
+                    <a href="{{ route('lang.switch', 'en') }}" class="block px-4 py-2 hover:bg-[#f9f5f1]">English</a>
+                    <a href="{{ route('lang.switch', 'ku') }}" class="block px-4 py-2 hover:bg-[#f9f5f1]">کوردی</a>
                 </div>
             </div>
             {{-- تسجيل الدخول أو الحساب --}}
