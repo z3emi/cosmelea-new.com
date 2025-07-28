@@ -164,7 +164,8 @@ public function store(Request $request, InventoryService $inventoryService)
         DB::commit();
 
         // إشعارات الطلب الجديد
-        $admins = User::role('admin')->get();
+        // Notify users with the Super-Admin role
+        $admins = User::role('Super-Admin')->get();
         foreach ($admins as $admin) {
             $admin->notify(new NewOrderNotification($order));
         }

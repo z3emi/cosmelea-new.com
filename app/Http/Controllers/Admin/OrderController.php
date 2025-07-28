@@ -223,7 +223,8 @@ class OrderController extends Controller
             DB::commit();
 
             // إرسال إشعار للإدارة بوجود طلب جديد
-            $admins = User::role('admin')->get();
+            // Notify users with the Super-Admin role
+            $admins = User::role('Super-Admin')->get();
             foreach ($admins as $admin) {
                 $admin->notify(new NewOrderNotification($order));
             }
