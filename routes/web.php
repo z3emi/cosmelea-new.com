@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth; // موجود فقط بالكود الثا�
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 
 // Frontend Controllers
 use App\Http\Controllers\HomeController;
@@ -53,11 +54,17 @@ Route::get('/maintenance', function () {
     return view('frontend.maintenance');
 })->name('maintenance.page');
 
-Route::get('lang/{locale}', function ($locale) {
+Route::get('lang/{locale}', function (Request $request, $locale) {
     if (in_array($locale, ['ar', 'en', 'ku'])) {
         Session::put('locale', $locale);
     }
-    return redirect()->back();
+
+    $redirectUrl = $request->header('referer');
+    if (!$redirectUrl || Str::contains($redirectUrl, ['/wishlist/count', '/cart/count'])) {
+        $redirectUrl = route('homepage');
+    }
+
+    return redirect($redirectUrl);
 })->name('lang.switch');
 
 Route::get('/track-order', [OrderTrackingController::class, 'showTrackingForm'])->name('tracking.form');
