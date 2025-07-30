@@ -173,8 +173,9 @@ public function store(Request $request, InventoryService $inventoryService)
 
         // تنظيف بيانات الجلسة المتعلقة بالعربة والخصم
         session()->forget(['cart', 'discount_code', 'discount_value', 'discount_code_id']);
+        session()->put('order_id', $order->id);
 
-        return redirect()->route('checkout.success')->with('order_id', $order->id);
+        return redirect()->route('checkout.success');
 
     } catch (\Exception $e) {
         DB::rollBack();
@@ -187,7 +188,7 @@ public function store(Request $request, InventoryService $inventoryService)
      */
     public function success()
     {
-        $orderId = session('order_id');
+        $orderId = session()->pull('order_id');
         $order = $orderId ? Order::find($orderId) : null;
         if (!$order) {
             return redirect()->route('homepage');
